@@ -94,7 +94,9 @@ const Button = styled.button`
   width: 36px;
   transition: all 0.3s ease;
   border-radius: 50%;
-
+  svg {
+    pointer-events: none;
+  }
   &:hover {
     background: rgb(65, 65, 65);
     color: white;
