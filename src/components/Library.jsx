@@ -81,7 +81,7 @@ const SongContainer = styled.div`
 `;
 
 const Title = styled.h2`
-  padding: 2.05rem;
+  padding: 2rem;
 `;
 
 export default Library;
