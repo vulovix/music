@@ -19,7 +19,7 @@ const Library = ({
     setLibraryStatus(false);
   };
 
-  useOutsideClick(myComponentRef, handleOutsideClick, ["library-toggle"]);
+  useOutsideClick(myComponentRef, handleOutsideClick, ["nav-toggle"]);
 
   return (
     <LibraryContainer ref={myComponentRef} libraryStatus={libraryStatus}>
