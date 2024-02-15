@@ -82,10 +82,8 @@ const App = () => {
   };
 
   const onSongRemove = (song) => {
-    console.log("song", song, songs);
     if (songs.length > 1) {
       const newSongs = songs.filter((x) => x.id !== song.id);
-      console.log(newSongs);
       setSongs(newSongs);
       localStorage.setItem("xOS_Music", JSON.stringify(newSongs));
     }

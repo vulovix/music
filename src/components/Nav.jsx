@@ -16,16 +16,18 @@ const Nav = ({ libraryStatus, setLibraryStatus, onSubmit }) => {
   const onChange = (e) => setSearchTerm(e.target.value);
   return (
     <NavContainer>
-      <H1 libraryStatus={libraryStatus}>xMusic</H1>
+      <Title libraryStatus={libraryStatus}>Music</Title>
       <Search
-        placeholder="Search"
+        placeholder="Search..."
         value={searchTerm}
         onKeyDown={onKeyDown}
         onChange={onChange}
       />
-      <Button onClick={() => setLibraryStatus(!libraryStatus)}>
+      <Button
+        name="nav-toggle"
+        onClick={() => setLibraryStatus(!libraryStatus)}
+      >
         <FontAwesomeIcon icon={faMusic} />
-        &nbsp; Library
       </Button>
     </NavContainer>
   );
@@ -37,11 +39,13 @@ const Search = styled.input`
   cursor: pointer;
   border: 2px solid rgb(65, 65, 65);
   padding: 0.5rem;
+  outline: none;
   border-radius: 1rem;
   transition: all 0.3s ease;
   color: rgb(65, 65, 65);
   text-align: center;
-  /* &:hover, */
+  display: flex;
+  flex: 0.5;
   &:focus {
     &::placeholder {
       color: transparent;
@@ -58,6 +62,8 @@ const NavContainer = styled.div`
   align-items: center;
   max-width: 940px;
   margin: 0 auto;
+  gap: 1rem;
+
   @media screen and (max-width: 768px) {
     position: fixed;
     z-index: 10;
@@ -67,8 +73,10 @@ const NavContainer = styled.div`
   }
 `;
 
-const H1 = styled.h1`
-  transition: all 0.5s ease;
+const Title = styled.h2`
+  transition: all 0.5s ease-out;
+  max-width: 36px;
+  overflow: visible;
 
   @media screen and (max-width: 768px) {
     visibility: ${(p) => (p.libraryStatus ? "hidden" : "visible")};
@@ -83,9 +91,10 @@ const Button = styled.button`
   cursor: pointer;
   border: 2px solid rgb(65, 65, 65);
   padding: 0.5rem;
+  width: 36px;
   transition: all 0.3s ease;
-  border-radius: 1rem;
-  min-width: 100px;
+  border-radius: 50%;
+
   &:hover {
     background: rgb(65, 65, 65);
     color: white;

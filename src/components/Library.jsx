@@ -19,11 +19,11 @@ const Library = ({
     setLibraryStatus(false);
   };
 
-  useOutsideClick(myComponentRef, handleOutsideClick);
+  useOutsideClick(myComponentRef, handleOutsideClick, ["library-toggle"]);
 
   return (
     <LibraryContainer ref={myComponentRef} libraryStatus={libraryStatus}>
-      <H1>Library</H1>
+      <Title>Library</Title>
       <SongContainer>
         {songs.map((song) => (
           <LibrarySong
@@ -80,8 +80,8 @@ const SongContainer = styled.div`
   background-color: white;
 `;
 
-const H1 = styled.h2`
-  padding: 2rem;
+const Title = styled.h2`
+  padding: 2.05rem;
 `;
 
 export default Library;
