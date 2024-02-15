@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 
-const useOutsideClick = (ref, callback, ignoredElements) => {
+const useOutsideClick = (ref, callback, ignoredElements = []) => {
   const handleClickOutside = (event) => {
     if (
       ref.current &&
       !ref.current.contains(event.target) &&
-      ignoredElements.contains(event.target.name)
+      !ignoredElements.includes(event.target.name)
     ) {
       callback();
     }
