@@ -1,16 +1,26 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMusic } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
 
-const Nav = ({ libraryStatus, setLibraryStatus, onSubmit }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const onKeyDown = (e) => {
-    if (e.key === "Enter") {
-      const term = searchTerm ? searchTerm.trim() : "";
-      if (term) {
-        onSubmit(term);
-      }
+const Nav = ({
+  libraryStatus,
+  setLibraryStatus,
+  setSearchStatus,
+  // onSubmit,
+  searchTerm,
+  setSearchTerm,
+}) => {
+  // const onKeyDown = (e) => {
+  //   if (e.key === "Enter") {
+  //     const term = searchTerm ? searchTerm.trim() : "";
+  //     if (term) {
+  //       onSubmit(term);
+  //     }
+  //   }
+  // };
+  const onFocus = () => {
+    if (searchTerm.trim()) {
+      setSearchStatus(true);
     }
   };
   const onChange = (e) => setSearchTerm(e.target.value);
@@ -20,8 +30,11 @@ const Nav = ({ libraryStatus, setLibraryStatus, onSubmit }) => {
       <Search
         placeholder="Search..."
         value={searchTerm}
-        onKeyDown={onKeyDown}
+        // onKeyDown={onKeyDown}
         onChange={onChange}
+        onFocus={onFocus}
+        name="search-input"
+        autoComplete="off"
       />
       <Button
         name="nav-toggle"

@@ -43,14 +43,18 @@ const LibrarySong = ({
         <H1>{song.name}</H1>
         <H2>{song.artist}</H2>
       </LibrarySongDescription>
-      <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          onSongRemove(song);
-        }}
-      >
-        <FontAwesomeIcon icon={faRemove} />
-      </Button>
+      {onSongRemove ? (
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            onSongRemove(song);
+          }}
+        >
+          <FontAwesomeIcon icon={faRemove} />
+        </Button>
+      ) : (
+        <></>
+      )}
     </LibrarySongContainer>
   );
 };

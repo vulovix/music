@@ -7,9 +7,12 @@ import "./App.css";
 import Player from "./components/Player";
 import Song from "./components/Song";
 import Library from "./components/Library";
+import SearchResults from "./components/SearchResults";
+
 import Nav from "./components/Nav";
 
 import { data, getColor } from "./data";
+import useDebounce from "./hooks/useDebounce";
 
 const storageMusic = localStorage.getItem("xOS_Music");
 const initialData = storageMusic
@@ -18,10 +21,13 @@ const initialData = storageMusic
 
 const App = () => {
   const audioRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [songs, setSongs] = useState(initialData);
+  const [searchResults, setSearchResults] = useState([]);
   const [currentSong, setCurrentSong] = useState(songs[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [libraryStatus, setLibraryStatus] = useState(false);
+  const [searchStatus, setSearchStatus] = useState(false);
   const [songInfo, setSongInfo] = useState({
     currentTime: 0,
     duration: 0,
@@ -60,11 +66,11 @@ const App = () => {
     }
   };
 
-  const onSearch = (term) => {
+  const onHandleSearch = useDebounce((term, callBack) => {
     fetch(`https://saavn.dev/search/songs?query=${term}`)
       .then((res) => res.json())
       .then((res) => {
-        const newSongs = [
+        const results = [
           ...res.data.results.map((song) => ({
             id: uuidv4(),
             active: false,
@@ -74,12 +80,10 @@ const App = () => {
             cover: song.image[song.image.length - 1].link, // highest quality (320p)
             audio: song.downloadUrl[song.downloadUrl.length - 1].link, // highest quality (320p)
           })),
-          ...songs,
         ];
-        setSongs(newSongs);
-        localStorage.setItem("xOS_Music", JSON.stringify(newSongs));
+        callBack(results);
       });
-  };
+  });
 
   const onSongRemove = (song) => {
     if (songs.length > 1) {
@@ -89,12 +93,31 @@ const App = () => {
     }
   };
 
+  const onSetSearchTerm = (term) => {
+    setSearchTerm(term);
+    onHandleSearch(term, (results) => {
+      setSearchResults(results);
+      setSearchStatus(true);
+      setLibraryStatus(false);
+    });
+  };
+
+  const onSelectSearchSong = (song) => {
+    const newSongs = [song, ...songs];
+    setSongs(newSongs);
+    setCurrentSong(song);
+    localStorage.setItem("xOS_Music", JSON.stringify(newSongs));
+    setSearchStatus(false);
+  };
+
   return (
     <AppContainer libraryStatus={libraryStatus}>
       <Nav
-        onSubmit={onSearch}
         libraryStatus={libraryStatus}
         setLibraryStatus={setLibraryStatus}
+        setSearchStatus={setSearchStatus}
+        searchTerm={searchTerm}
+        setSearchTerm={onSetSearchTerm}
       />
       <Song currentSong={currentSong} />
       <Player
@@ -107,6 +130,14 @@ const App = () => {
         setSongInfo={setSongInfo}
         songs={songs}
         setSongs={setSongs}
+      />
+      <SearchResults
+        songs={searchResults}
+        setCurrentSong={onSelectSearchSong}
+        audioRef={audioRef}
+        isPlaying={isPlaying}
+        libraryStatus={searchStatus}
+        setLibraryStatus={setSearchStatus}
       />
       <Library
         songs={songs}
