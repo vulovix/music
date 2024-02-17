@@ -11,18 +11,14 @@ import SearchResults from "./components/SearchResults";
 
 import Nav from "./components/Nav";
 
-import { data, getColor } from "./data";
+import { getColor } from "./data";
 import useDebounce from "./hooks/useDebounce";
-
-const storageMusic = localStorage.getItem("xOS_Music");
-const initialData = storageMusic
-  ? JSON.parse(localStorage.getItem("xOS_Music")) || data
-  : data;
+import { StorageKeys, getStorage, setStorage } from "./utils/storage";
 
 const App = () => {
   const audioRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [songs, setSongs] = useState(initialData);
+  const [songs, setSongs] = useState(getStorage().library);
   const [searchResults, setSearchResults] = useState([]);
   const [currentSong, setCurrentSong] = useState(songs[0]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -89,7 +85,7 @@ const App = () => {
     if (songs.length > 1) {
       const newSongs = songs.filter((x) => x.id !== song.id);
       setSongs(newSongs);
-      localStorage.setItem("xOS_Music", JSON.stringify(newSongs));
+      setStorage(StorageKeys.library, newSongs);
     }
   };
 
@@ -106,7 +102,7 @@ const App = () => {
     const newSongs = [song, ...songs];
     setSongs(newSongs);
     setCurrentSong(song);
-    localStorage.setItem("xOS_Music", JSON.stringify(newSongs));
+    setStorage(StorageKeys.library, newSongs);
     setSearchStatus(false);
   };
 

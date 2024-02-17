@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-export const data = [
+export const defaultLibrary = [
   {
     name: "Beaver Creek",
     cover:
@@ -65,5 +65,5 @@ export const data = [
 
 export const getColor = () => {
   const randomNumber = Math.floor(Math.random() * 5);
-  return data[randomNumber].color;
+  return defaultLibrary[randomNumber].color;
 };
